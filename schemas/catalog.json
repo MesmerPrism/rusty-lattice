@@ -1,0 +1,10 @@
+{
+  "schema": "rusty.lattice.schema_catalog.v1",
+  "schemas": [
+    {
+      "id": "rusty.lattice.display_view_set.v1",
+      "owner_crate": "rusty-lattice-model",
+      "fixture": "fixtures/view_sets/quest-makepad-synthetic-display-view-set.json"
+    }
+  ]
+}
