@@ -1,0 +1,29 @@
+{
+  "schema": "rusty.lattice.hand_joint_mapping.v1",
+  "mapping_id": "duplicate-hand-joint-mapping",
+  "provider_id": "generic-tracked-hand-provider",
+  "source": "damaged-fixture",
+  "source_joint_set": "openxr_ext_hand_tracking_26",
+  "source_joint_count": 26,
+  "target_schema_id": "rusty.matter.hand.rig_capture.v1",
+  "target_joint_count": 4,
+  "revision": 1,
+  "entries": [
+    {
+      "source_joint_index": 0,
+      "source_joint_name": "wrist",
+      "target_joint_index": 0,
+      "target_joint_name": "bind.wrist",
+      "joint_role": "wrist"
+    },
+    {
+      "source_joint_index": 0,
+      "source_joint_name": "duplicate_wrist",
+      "target_joint_index": 1,
+      "target_joint_name": "bind.palm",
+      "joint_role": "palm"
+    }
+  ],
+  "valid": true,
+  "confidence": 1.0
+}

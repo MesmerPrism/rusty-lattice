@@ -3,8 +3,9 @@
 pub mod hand;
 
 pub use hand::{
-    validate_hand_provider_capability_snapshot, HandCapability, HandJointSet, HandMeshBinding,
-    HandProviderCapabilitySnapshot, HandRuntimeSignals, Handedness,
+    validate_hand_joint_mapping_snapshot, validate_hand_provider_capability_snapshot,
+    HandCapability, HandJointMapEntry, HandJointMappingSnapshot, HandJointSet, HandMeshBinding,
+    HandProviderCapabilitySnapshot, HandRuntimeSignals, Handedness, HAND_JOINT_MAPPING_SCHEMA_ID,
     HAND_PROVIDER_CAPABILITY_SCHEMA_ID,
 };
 

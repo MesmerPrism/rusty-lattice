@@ -38,3 +38,9 @@ signals. Matter remains the owner of hand rig, mesh payload, joint-frame, and
 CPU-skinning truth; Optics remains the owner of visual profiles and debug
 presentation; platform adapters remain the owner of SDK calls and runtime
 handles.
+
+`rusty.lattice.hand_joint_mapping.v1` records provider-joint to target
+bind-joint mappings. It can reference target schema IDs such as Matter hand rig
+payloads as strings, but it does not import Matter crates or become the owner
+of rig geometry, bind poses, skinning weights, or CPU skinning. This keeps the
+provider relation contract separate from computational mesh truth.

@@ -1,11 +1,14 @@
 //! Hand provider capability snapshots.
 
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeSet;
 
 use crate::{LatticeValidationError, ReferenceSpace};
 
 /// Schema id for hand provider capability snapshots.
 pub const HAND_PROVIDER_CAPABILITY_SCHEMA_ID: &str = "rusty.lattice.hand_provider_capability.v1";
+/// Schema id for hand provider joint mapping snapshots.
+pub const HAND_JOINT_MAPPING_SCHEMA_ID: &str = "rusty.lattice.hand_joint_mapping.v1";
 
 /// Logical hand side.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -170,6 +173,98 @@ impl HandProviderCapabilitySnapshot {
     }
 }
 
+/// One provider-joint to target bind-joint mapping entry.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HandJointMapEntry {
+    /// Provider joint index.
+    pub source_joint_index: u16,
+    /// Provider joint name or stable provider label.
+    pub source_joint_name: String,
+    /// Target bind-joint index in the downstream hand rig.
+    pub target_joint_index: u16,
+    /// Target bind-joint name or stable target label.
+    pub target_joint_name: String,
+    /// Semantic role used by tools and reviewers.
+    pub joint_role: String,
+}
+
+impl HandJointMapEntry {
+    /// Whether this entry is usable for the declared joint counts.
+    #[must_use]
+    pub fn is_valid(&self, source_joint_count: u16, target_joint_count: u16) -> bool {
+        self.source_joint_index < source_joint_count
+            && self.target_joint_index < target_joint_count
+            && !self.source_joint_name.trim().is_empty()
+            && !self.target_joint_name.trim().is_empty()
+            && !self.joint_role.trim().is_empty()
+    }
+}
+
+/// Snapshot mapping a provider joint set into a target hand rig joint layout.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct HandJointMappingSnapshot {
+    /// Schema id.
+    pub schema: String,
+    /// Stable mapping id.
+    pub mapping_id: String,
+    /// Provider id that emits the source joint set.
+    pub provider_id: String,
+    /// Source adapter or fixture id.
+    pub source: String,
+    /// Provider joint layout.
+    pub source_joint_set: HandJointSet,
+    /// Number of joints emitted by the source provider.
+    pub source_joint_count: u16,
+    /// Target payload schema id, such as a Matter hand rig schema.
+    pub target_schema_id: String,
+    /// Number of bind joints expected by the target payload.
+    pub target_joint_count: u16,
+    /// Monotonic relation revision.
+    pub revision: u64,
+    /// Joint mapping entries.
+    pub entries: Vec<HandJointMapEntry>,
+    /// Runtime validity bit.
+    pub valid: bool,
+    /// Mapping confidence from 0 to 1.
+    pub confidence: f32,
+}
+
+impl HandJointMappingSnapshot {
+    /// Create a mapping with the current schema id.
+    pub fn new(
+        mapping_id: impl Into<String>,
+        provider_id: impl Into<String>,
+        source: impl Into<String>,
+        source_joint_set: HandJointSet,
+        source_joint_count: u16,
+        target_schema_id: impl Into<String>,
+        target_joint_count: u16,
+        revision: u64,
+        entries: Vec<HandJointMapEntry>,
+    ) -> Self {
+        Self {
+            schema: HAND_JOINT_MAPPING_SCHEMA_ID.to_string(),
+            mapping_id: mapping_id.into(),
+            provider_id: provider_id.into(),
+            source: source.into(),
+            source_joint_set,
+            source_joint_count,
+            target_schema_id: target_schema_id.into(),
+            target_joint_count,
+            revision,
+            entries,
+            valid: true,
+            confidence: 1.0,
+        }
+    }
+
+    /// Whether this mapping is usable by downstream adapters.
+    #[must_use]
+    pub fn is_valid(&self) -> bool {
+        validate_hand_joint_mapping_snapshot(self).is_ok()
+    }
+}
+
 /// Validate a hand provider capability snapshot and report all top-level failures.
 pub fn validate_hand_provider_capability_snapshot(
     snapshot: &HandProviderCapabilitySnapshot,
@@ -246,6 +341,79 @@ pub fn validate_hand_provider_capability_snapshot(
     }
 }
 
+/// Validate a hand joint mapping snapshot and report all top-level failures.
+pub fn validate_hand_joint_mapping_snapshot(
+    mapping: &HandJointMappingSnapshot,
+) -> Result<(), Vec<LatticeValidationError>> {
+    let mut errors = Vec::new();
+    if mapping.schema != HAND_JOINT_MAPPING_SCHEMA_ID {
+        errors.push(LatticeValidationError::new(format!(
+            "unsupported hand joint mapping schema {}",
+            mapping.schema
+        )));
+    }
+    if mapping.mapping_id.trim().is_empty() {
+        errors.push(LatticeValidationError::new("mapping_id must not be empty"));
+    }
+    if mapping.provider_id.trim().is_empty() {
+        errors.push(LatticeValidationError::new("provider_id must not be empty"));
+    }
+    if mapping.source.trim().is_empty() {
+        errors.push(LatticeValidationError::new("source must not be empty"));
+    }
+    if mapping.source_joint_count == 0 {
+        errors.push(LatticeValidationError::new(
+            "source_joint_count must be non-zero",
+        ));
+    }
+    if mapping.target_schema_id.trim().is_empty() {
+        errors.push(LatticeValidationError::new(
+            "target_schema_id must not be empty",
+        ));
+    }
+    if mapping.target_joint_count == 0 {
+        errors.push(LatticeValidationError::new(
+            "target_joint_count must be non-zero",
+        ));
+    }
+    if mapping.revision == 0 {
+        errors.push(LatticeValidationError::new("revision must be non-zero"));
+    }
+    if mapping.entries.is_empty() {
+        errors.push(LatticeValidationError::new("entries must not be empty"));
+    }
+    if !mapping.valid {
+        errors.push(LatticeValidationError::new("mapping must be valid"));
+    }
+    if !mapping.confidence.is_finite() || !(0.0..=1.0).contains(&mapping.confidence) {
+        errors.push(LatticeValidationError::new(
+            "confidence must be finite and in [0, 1]",
+        ));
+    }
+
+    let mut source_indices = BTreeSet::new();
+    for entry in &mapping.entries {
+        if !source_indices.insert(entry.source_joint_index) {
+            errors.push(LatticeValidationError::new(format!(
+                "duplicate source joint index {}",
+                entry.source_joint_index
+            )));
+        }
+        if !entry.is_valid(mapping.source_joint_count, mapping.target_joint_count) {
+            errors.push(LatticeValidationError::new(format!(
+                "joint mapping entry {} must be coherent",
+                entry.source_joint_index
+            )));
+        }
+    }
+
+    if errors.is_empty() {
+        Ok(())
+    } else {
+        Err(errors)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -253,8 +421,13 @@ mod tests {
     const VALID_HAND_PROVIDER: &str = include_str!(
         "../../../fixtures/hand_provider_capabilities/generic-tracked-hand-provider-capability.json"
     );
+    const VALID_HAND_MAPPING: &str = include_str!(
+        "../../../fixtures/hand_joint_mappings/generic-openxr-to-matter-bind-joint-map.json"
+    );
     const DAMAGED_HAND_PROVIDER: &str =
         include_str!("../../../fixtures/damaged/duplicate-hand-provider-capability.json");
+    const DAMAGED_HAND_MAPPING: &str =
+        include_str!("../../../fixtures/damaged/duplicate-hand-joint-mapping.json");
 
     #[test]
     fn valid_hand_provider_fixture_parses_and_validates() {
@@ -290,5 +463,24 @@ mod tests {
             },
         };
         assert!(!hand.is_valid());
+    }
+
+    #[test]
+    fn valid_hand_joint_mapping_fixture_parses_and_validates() {
+        let mapping: HandJointMappingSnapshot = serde_json::from_str(VALID_HAND_MAPPING).unwrap();
+        validate_hand_joint_mapping_snapshot(&mapping).unwrap();
+        assert!(mapping
+            .entries
+            .iter()
+            .all(|entry| entry.is_valid(mapping.source_joint_count, mapping.target_joint_count)));
+    }
+
+    #[test]
+    fn damaged_hand_joint_mapping_fixture_reports_duplicate_source() {
+        let mapping: HandJointMappingSnapshot = serde_json::from_str(DAMAGED_HAND_MAPPING).unwrap();
+        let errors = validate_hand_joint_mapping_snapshot(&mapping).unwrap_err();
+        assert!(errors
+            .iter()
+            .any(|error| error.message.contains("duplicate source joint index")));
     }
 }

@@ -10,6 +10,11 @@
       "id": "rusty.lattice.hand_provider_capability.v1",
       "owner_crate": "rusty-lattice-model",
       "fixture": "fixtures/hand_provider_capabilities/generic-tracked-hand-provider-capability.json"
+    },
+    {
+      "id": "rusty.lattice.hand_joint_mapping.v1",
+      "owner_crate": "rusty-lattice-model",
+      "fixture": "fixtures/hand_joint_mappings/generic-openxr-to-matter-bind-joint-map.json"
     }
   ]
 }

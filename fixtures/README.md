@@ -3,4 +3,6 @@
 - `view_sets/`: valid display view set fixtures.
 - `hand_provider_capabilities/`: valid runtime hand provider capability
   snapshots.
+- `hand_joint_mappings/`: valid provider-joint to target bind-joint mapping
+  snapshots.
 - `damaged/`: invalid view set fixtures that must be rejected.
