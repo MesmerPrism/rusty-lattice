@@ -5,6 +5,11 @@
       "id": "rusty.lattice.display_view_set.v1",
       "owner_crate": "rusty-lattice-model",
       "fixture": "fixtures/view_sets/quest-makepad-synthetic-display-view-set.json"
+    },
+    {
+      "id": "rusty.lattice.hand_provider_capability.v1",
+      "owner_crate": "rusty-lattice-model",
+      "fixture": "fixtures/hand_provider_capabilities/generic-tracked-hand-provider-capability.json"
     }
   ]
 }

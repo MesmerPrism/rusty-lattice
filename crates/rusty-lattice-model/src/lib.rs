@@ -1,5 +1,13 @@
 //! Platform-neutral relation contracts for Rusty Lattice.
 
+pub mod hand;
+
+pub use hand::{
+    validate_hand_provider_capability_snapshot, HandCapability, HandJointSet, HandMeshBinding,
+    HandProviderCapabilitySnapshot, HandRuntimeSignals, Handedness,
+    HAND_PROVIDER_CAPABILITY_SCHEMA_ID,
+};
+
 use serde::{Deserialize, Serialize};
 
 /// Schema id for stereo display view sets.
@@ -332,7 +340,7 @@ pub struct LatticeValidationError {
 }
 
 impl LatticeValidationError {
-    fn new(message: impl Into<String>) -> Self {
+    pub(crate) fn new(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),
         }

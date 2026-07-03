@@ -1,0 +1,46 @@
+{
+  "schema": "rusty.lattice.hand_provider_capability.v1",
+  "snapshot_id": "generic-tracked-hand-provider-capability-fixture",
+  "provider_id": "generic-tracked-hand-provider",
+  "source": "synthetic-fixture",
+  "reference_space": {
+    "stable_id": "local-stage",
+    "kind": "stage"
+  },
+  "timestamp_domain": "predicted_display_time_ns",
+  "revision": 1,
+  "hands": [
+    {
+      "hand": "left",
+      "joint_set": "openxr_ext_hand_tracking_26",
+      "joint_count": 26,
+      "mesh_binding": "static_bind_mesh",
+      "signals": {
+        "joint_poses": true,
+        "joint_radii": true,
+        "joint_location_flags": true,
+        "joint_confidence": true,
+        "pinch_state": true,
+        "mesh_vertices": true,
+        "mesh_skinning_weights": true
+      }
+    },
+    {
+      "hand": "right",
+      "joint_set": "openxr_ext_hand_tracking_26",
+      "joint_count": 26,
+      "mesh_binding": "static_bind_mesh",
+      "signals": {
+        "joint_poses": true,
+        "joint_radii": true,
+        "joint_location_flags": true,
+        "joint_confidence": true,
+        "pinch_state": true,
+        "mesh_vertices": true,
+        "mesh_skinning_weights": true
+      }
+    }
+  ],
+  "valid": true,
+  "confidence": 1.0
+}
