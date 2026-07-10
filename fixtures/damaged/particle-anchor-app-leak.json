@@ -1,0 +1,21 @@
+{
+  "schema": "rusty.lattice.situated_anchor.v1",
+  "anchor_id": "anchor.invalid-boundary-leak",
+  "reference_space": {
+    "stable_id": "space.local-floor",
+    "kind": "local"
+  },
+  "pose": {
+    "position": {"x": 0.0, "y": 1.2, "z": -2.0},
+    "orientation": {"x": 0.0, "y": 0.0, "z": 0.0, "w": 1.0}
+  },
+  "valid": true,
+  "confidence": 1.0,
+  "revision": 1,
+  "source": "fixture.damaged",
+  "application_scene": "spatial-panel",
+  "platform_handle": 42,
+  "renderer_resource": "vk-buffer",
+  "private_driver": "vendor-secret",
+  "control_rate_hz": 240
+}

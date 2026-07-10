@@ -31,6 +31,9 @@ behavior, OpenXR handles, or device SDK calls.
 
 - Lattice owns relation state: spaces, poses, views, spatial roles, frame-state
   binding, validity, confidence, staleness, and capability snapshots.
+- `rusty.lattice.situated_anchor.v1` is the generic anchor/frame handoff for
+  geometry and particle consumers. It owns pose observation only, rejects app
+  policy fields, and must not grow simulation or appearance state.
 - Optics owns stereo projection, lenses, homographies, appearance policy, and
   renderer-neutral visual payload preparation.
 - Quest and other platform adapters convert SDK/runtime data into Lattice

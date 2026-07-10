@@ -1,6 +1,9 @@
 //! Platform-neutral relation contracts for Rusty Lattice.
 
+pub mod anchor;
 pub mod hand;
+
+pub use anchor::{validate_situated_anchor, SituatedAnchorSnapshot, SITUATED_ANCHOR_SCHEMA_ID};
 
 pub use hand::{
     validate_hand_joint_mapping_snapshot, validate_hand_provider_capability_snapshot,

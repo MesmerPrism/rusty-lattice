@@ -15,6 +15,11 @@
       "id": "rusty.lattice.hand_joint_mapping.v1",
       "owner_crate": "rusty-lattice-model",
       "fixture": "fixtures/hand_joint_mappings/generic-openxr-to-matter-bind-joint-map.json"
+    },
+    {
+      "id": "rusty.lattice.situated_anchor.v1",
+      "owner_crate": "rusty-lattice-model",
+      "fixture": "fixtures/anchors/particle-world-anchor.json"
     }
   ]
 }
