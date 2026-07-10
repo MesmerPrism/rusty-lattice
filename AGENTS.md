@@ -34,6 +34,11 @@ behavior, OpenXR handles, or device SDK calls.
 - `rusty.lattice.situated_anchor.v1` is the generic anchor/frame handoff for
   geometry and particle consumers. It owns pose observation only, rejects app
   policy fields, and must not grow simulation or appearance state.
+- Hand providers advertise capabilities with
+  `rusty.lattice.hand_provider_capability.v1` and emit tracked relations with
+  `rusty.lattice.hand_joint_frame.v1`. Preserve provider, hand, reference-space,
+  coordinate-basis, timestamp-domain, validity, confidence, and staleness
+  identity; mesh rigs, skinning, visual policy, and platform handles stay out.
 - Optics owns stereo projection, lenses, homographies, appearance policy, and
   renderer-neutral visual payload preparation.
 - Quest and other platform adapters convert SDK/runtime data into Lattice

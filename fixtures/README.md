@@ -5,4 +5,7 @@
   snapshots.
 - `hand_joint_mappings/`: valid provider-joint to target bind-joint mapping
   snapshots.
-- `damaged/`: invalid view set fixtures that must be rejected.
+- `hand_joint_frames/`: provider-neutral tracked joint frames with explicit
+  basis, validity, confidence, and staleness.
+- `damaged/`: invalid view, duplicate capability/mapping, provider-mixup, and
+  coordinate-basis mismatch fixtures that must be rejected.

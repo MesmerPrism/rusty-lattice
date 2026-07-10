@@ -6,9 +6,11 @@ pub mod hand;
 pub use anchor::{validate_situated_anchor, SituatedAnchorSnapshot, SITUATED_ANCHOR_SCHEMA_ID};
 
 pub use hand::{
-    validate_hand_joint_mapping_snapshot, validate_hand_provider_capability_snapshot,
-    HandCapability, HandJointMapEntry, HandJointMappingSnapshot, HandJointSet, HandMeshBinding,
-    HandProviderCapabilitySnapshot, HandRuntimeSignals, Handedness, HAND_JOINT_MAPPING_SCHEMA_ID,
+    validate_hand_joint_frame_snapshot, validate_hand_joint_mapping_snapshot,
+    validate_hand_provider_capability_snapshot, validate_hand_provider_frame_match, HandCapability,
+    HandCoordinateBasis, HandJointFrameSnapshot, HandJointMapEntry, HandJointMappingSnapshot,
+    HandJointSample, HandJointSet, HandMeshBinding, HandProviderCapabilitySnapshot,
+    HandRuntimeSignals, Handedness, HAND_JOINT_FRAME_SCHEMA_ID, HAND_JOINT_MAPPING_SCHEMA_ID,
     HAND_PROVIDER_CAPABILITY_SCHEMA_ID,
 };
 

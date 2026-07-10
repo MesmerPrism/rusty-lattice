@@ -17,7 +17,9 @@ projection and homography contracts. The hand provider capability and joint
 mapping contracts record what relation and mesh signals a source can report,
 and how provider joint indices map into a target bind-joint layout, without
 importing OpenXR, Spatial SDK, Makepad, Quest, or renderer dependencies into
-Lattice.
+Lattice. `rusty.lattice.hand_joint_frame.v1` adds provider-neutral per-joint
+poses, validity, confidence, coordinate basis, timestamp domain, and staleness;
+provider/basis mixups and platform-field leakage fail closed.
 
 ## Validation
 

@@ -7,6 +7,7 @@
     "stable_id": "local-stage",
     "kind": "stage"
   },
+  "coordinate_basis": "right_handed_y_up_negative_z_forward",
   "timestamp_domain": "predicted_display_time_ns",
   "revision": 1,
   "hands": [

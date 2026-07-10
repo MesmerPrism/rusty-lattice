@@ -10,14 +10,14 @@
   "revision": 1,
   "entries": [
     {
-      "source_joint_index": 0,
+      "source_joint_index": 1,
       "source_joint_name": "wrist",
       "target_joint_index": 0,
       "target_joint_name": "bind.wrist",
       "joint_role": "wrist"
     },
     {
-      "source_joint_index": 1,
+      "source_joint_index": 0,
       "source_joint_name": "palm",
       "target_joint_index": 1,
       "target_joint_name": "bind.palm",

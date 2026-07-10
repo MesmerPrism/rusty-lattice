@@ -1,0 +1,5 @@
+{
+  "schema": "rusty.lattice.hand_joint_frame_damage.v1",
+  "damage_id": "provider-mixup",
+  "provider_id": "different-provider"
+}

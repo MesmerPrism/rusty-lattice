@@ -1,0 +1,5 @@
+{
+  "schema": "rusty.lattice.hand_joint_frame_damage.v1",
+  "damage_id": "coordinate-basis-mismatch",
+  "coordinate_basis": "right_handed_y_up_positive_z_forward"
+}
